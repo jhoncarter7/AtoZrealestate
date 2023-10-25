@@ -14,9 +14,12 @@ const userSchema = new mongoose.Schema({
     },
     Password:{
         type: String,
-        required: true,
-       
+        required: true,  
     },
+    ProfileImg:{
+        type: String,
+        default: "https://icon-library.com/images/profile-picture-icon/profile-picture-icon-0.jpg"
+    }
 },{timestamps: true })
 
 const User = mongoose.model('User', userSchema)
