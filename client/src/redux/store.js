@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { combineReducers, configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import userReducer from "./user/userSlice";
 import {persistReducer, persistStore} from 'redux-persist'
@@ -12,7 +13,7 @@ const persistConfig = {
     storage,
     version: 1
 }
-// this reducer target the value and connect it with config
+// this reducer target the value and connect it with config and then persisitconfig store the data inside the localstorage
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 // now we replace the reducer with persistedReducer
