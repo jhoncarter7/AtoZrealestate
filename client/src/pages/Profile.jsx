@@ -1,11 +1,31 @@
+import { useEffect, useRef, useState } from 'react'
 import {useSelector} from 'react-redux'
+import {getStorage, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage'
+import app from '../firebase'
 export default function Profile() {
   const {currentUser} = useSelector((state)=> state.user)
+  const fileRef = useRef()
+  const [file, setFile] = useState(undefined)
+  console.log(file)
+
+  useEffect(()=>{
+    if(file){
+      handleFileUpload()
+    }
+  },[file]);
+
+  const handleFileUpload = ()=>{
+    const storage = getStorage(app)
+    const fileName = new Date().getTime() + file.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file)
+  }
   return (
     <div className='max-w-lg p-3 mx-auto'>
       <h1 className="text-3xl font-semibold text-center pt-3">Profile</h1>
       <form className='flex flex-col gap-4 pt-4'>
-      <img className='rounded-full w-24 h-24 object-cover self-center cursor-pointer' src={currentUser.ProfileImg} alt='Profilepic'/>
+        <input type="file" onChange={(e)=> setFile(e.target.files[0])} ref={fileRef} hidden accept='image/*'/>
+      <img onClick={()=> fileRef.current.click()} className='rounded-full w-24 h-24 object-cover self-center cursor-pointer' src={currentUser.ProfileImg} alt='Profilepic' />
       <input className='rounded-lg border p-3' type="text" placeholder='user name' id='userName'/>
       <input className='rounded-lg border p-3' type="text" placeholder='email' id='Email'/>
       <input className='rounded-lg border p-3' type="text" placeholder='password' id='Password'/>
