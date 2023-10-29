@@ -38,8 +38,9 @@ export default function Profile() {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setFilePerc(Math.round(progress));
       },
-      (_error) => {
+      (error) => {
         setFileUploadError(true);
+        console.log(error);
       },
       () => {
         // console.log('getDownloadURL'),
