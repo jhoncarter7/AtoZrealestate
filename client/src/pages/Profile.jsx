@@ -38,7 +38,7 @@ export default function Profile() {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setFilePerc(Math.round(progress));
       },
-      (error) => {
+      (_error) => {
         setFileUploadError(true);
       },
       () => {
@@ -63,11 +63,13 @@ export default function Profile() {
         <img
           onClick={() => fileRef.current.click()}
           className="rounded-full w-24 h-24 object-cover self-center cursor-pointer"
-          src={currentUser.ProfileImg}
+          src={formData.profileImg ||currentUser.ProfileImg}
           alt="Profilepic"
         />
-        { fileUploadError ? (<span className="text-red-700">image Uploade Error </span>): (filePerc > 0 && filePerc < 100) ? (<span>{`uploading ${filePerc}% `}</span>) : filePerc === 100 ? (<span className="text-green-700">Image successfully uploaded</span>) : ("") }
-       
+        <p className="text-sm self-center">
+
+        { fileUploadError ? (<span className="text-red-700">image Uploade Error(image must be less then 2mb) </span>): (filePerc > 0 && filePerc < 100) ? (<span>{`uploading ${filePerc}% `}</span>) : filePerc === 100 ? (<span className="text-green-700">Image successfully uploaded</span>) : ("") }
+        </p>
         <input
           className="rounded-lg border p-3"
           type="text"
