@@ -40,7 +40,7 @@ try {
   if(validUser){
   const token = jwt.sign({id: validUser._id}, process.env.JWT_SECRET)
   const {Password: pass, ...rest} = validUser._doc;
-  res.cookie('cookie_token', token, {httpOnly: true}).status(200).json(rest)
+  res.cookie('access_token', token, {httpOnly: true}).status(200).json(rest)
   }else{
     const PasswordGenerator = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8)
     const hashPassword = bcrypt.hashSync(PasswordGenerator, 10)
@@ -48,7 +48,7 @@ try {
    await newUser.save()
    const token = jwt.sign({id: newUser._id}, process.env.JWT_SECRET)
    const {Password: pass, ...rest} = newUser._doc
-    res.cookie("cookie_token", token, {httpOnly: true}).status(200).json(rest)
+    res.cookie("access_token", token, {httpOnly: true}).status(200).json(rest)
   }
 } catch (error) {
   next(error)
