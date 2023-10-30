@@ -6,7 +6,7 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { userUpdateStart, userUpdateSuccess, userUpdateFailure, userDeleteStart, userDeleteSuccess, userDeleteFailure } from "../redux/user/userSlice";
+import { userUpdateStart, userUpdateSuccess, userUpdateFailure, userDeleteStart, userDeleteSuccess, userDeleteFailure, signoutStart, signoutFailure, signoutSuccess } from "../redux/user/userSlice";
 import { app } from "../firebase";
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -96,6 +96,20 @@ try {
 }
 }
 
+const signOutHandler = async() => {
+  try {
+    dispatch(signoutStart())
+    const res = await fetch('/api/auth/signout')
+    const data = res.json()
+    if(data.success === false){
+    dispatch(signoutFailure(data.message))
+    return;
+    }
+  dispatch(signoutSuccess())
+  } catch (error) {
+    dispatch(signoutFailure(error.message))
+  }
+}
 
   return (
     <div className="max-w-lg p-3 mx-auto">
@@ -157,7 +171,7 @@ try {
       </form>
       <div className="text-red-700 flex justify-between pt-5 ">
         <span onClick={deleteHandler} className="cursor-pointer">Delete Account</span>
-        <span className="cursor-pointer">Sign Out</span>
+        <span onClick={signOutHandler} className="cursor-pointer">Sign Out</span>
       </div>
       <p className="text-red-700 mt-5">{error ? error : ''}</p>
       <p className="text-green-700 mt-5">{updateSuccess ? 'Profile updated successfully' : ''}</p>
