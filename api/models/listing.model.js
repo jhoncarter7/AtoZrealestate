@@ -51,12 +51,12 @@ import mongoose from "mongoose";
         required: true
 
     },
-    offers:{
+    offer:{
         type: Boolean,
         required: true
 
     },
-    imageURLs:{
+    imageUrls:{
         type: Array,
         required: true
 
