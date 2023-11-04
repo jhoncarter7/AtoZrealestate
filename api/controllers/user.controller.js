@@ -60,3 +60,16 @@ export const getUserListings = async(req, res, next)=>{
       next(errorHandler(401, "you can only view your own listings"))
   }
   }
+
+  export const deleteUserListing = async (req, res, next)=>{
+   if(req.user.id === req.params.id) {
+    try {
+      const deletelisting = await Listing.findByIdAndDelete({_id: req.body.id})
+      await res.status(201).json('one listing has been deleted')
+    } catch (error) {
+      next(error)
+    }
+   }else{
+    next(errorHandler(401, 'you can only delete your own listings'))
+   }
+  } 

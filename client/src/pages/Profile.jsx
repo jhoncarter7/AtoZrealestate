@@ -136,6 +136,28 @@ export default function Profile() {
       setUserListingError(error.message);
     }
   };
+
+  const deleteListingHandler = async (id) => {
+    try {
+      const res = await fetch(`/api/user/listing/delete/${currentUser._id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id,
+        }),
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message)
+        return;
+      }
+      setShowUserListings((prev)=> prev.filter((list)=> list._id !== id))
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="max-w-lg p-3 mx-auto">
       <h1 className="text-3xl font-semibold text-center pt-3">Profile</h1>
@@ -216,37 +238,43 @@ export default function Profile() {
         {updateSuccess ? "Profile updated successfully" : ""}
       </p>
       <button onClick={fetchUserListings} className="text-green-700 w-full">
-          show List
-        </button>
-      
-        {showUserListing &&
-          showUserListing.length > 0 && 
-            <div className="flex flex-col gap-4 ">
-              <h1 className="text-center text-2xl my-5">Your Listing</h1>
+        show List
+      </button>
+
+      {showUserListing && showUserListing.length > 0 && (
+        <div className="flex flex-col gap-4 ">
+          <h1 className="text-center text-2xl my-5">Your Listing</h1>
           {showUserListing.map((listing) => (
-            
-            <div key={listing._id} className="flex justify-between  border items-center rounded-lg p-1   gap-4">
+            <div
+              key={listing._id}
+              className="flex justify-between  border items-center rounded-lg p-1   gap-4"
+            >
               <Link to={`/listing/${listing._id}`}>
-              <img
-                src={listing.imageUrls[0]}
-                className="w-16 h-16 object-contain"
-              />
-              
+                <img
+                  src={listing.imageUrls[0]}
+                  className="w-16 h-16 object-contain"
+                />
               </Link>
-              <Link className="text-slate-700 font-semibold hover:underline truncate flex-1" to={`/listing/${listing._id}`}>
-              <p>{listing.name}</p>
+              <Link
+                className="text-slate-700 font-semibold hover:underline truncate flex-1"
+                to={`/listing/${listing._id}`}
+              >
+                <p>{listing.name}</p>
               </Link>
-              
+
               <div className="flex flex-col">
-              <button className="text-red-700 uppercase">delete</button>
-              <button className="text-green-700 uppercase">Edit</button>
+                <button
+                  onClick={() => deleteListingHandler(listing._id)}
+                  className="text-red-700 uppercase"
+                >
+                  delete
+                </button>
+                <button className="text-green-700 uppercase">Edit</button>
               </div>
             </div>
-            
           ))}
-
-          </div>}
-      
+        </div>
+      )}
 
       {userListingError ? userListingError : ""}
     </div>
