@@ -6,7 +6,7 @@ import {
 } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { app } from "../firebase";
-import {useSelector} from "react-redux"
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 export default function UpdateListing() {
   const [files, setFiles] = useState([]);
@@ -28,23 +28,23 @@ export default function UpdateListing() {
   const [imageUpload, setImageUpload] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  
-  const {currentUser} = useSelector((state) => state.user)
- const navigate = useNavigate()
-const params = useParams()
 
-  useEffect(()=> {
-    const fetchlist = async ()=>{
-     const res = await fetch(`/api/listing/get/${params.listingId}`)
-     const data = await res.json()
-     if(data.success === false){
-      console.log(data.message)
-      return;
-     }
-     setFormData(data)
-    }
-    fetchlist()
-  },[params.listingId]);
+  const { currentUser } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  const params = useParams();
+
+  useEffect(() => {
+    const fetchlist = async () => {
+      const res = await fetch(`/api/listing/get/${params.listingId}`);
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      setFormData(data);
+    };
+    fetchlist();
+  }, [params.listingId]);
   const handleImageSubmit = () => {
     setImageUpload(true);
     setImageUploadError(false);
@@ -133,8 +133,10 @@ const params = useParams()
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      if(formData.imageUrls.length < 1) return setError('You have to upload at least 1 image')
-      if(+formData.regularPrice < +formData.discountPrice) return setError('Discount price must be lower than regular price')
+      if (formData.imageUrls.length < 1)
+        return setError("You have to upload at least 1 image");
+      if (+formData.regularPrice < +formData.discountPrice)
+        return setError("Discount price must be lower than regular price");
       setLoading(true);
       setError(false);
       const res = await fetch(`/api/listing/update/${params.listingId}`, {
@@ -152,7 +154,7 @@ const params = useParams()
       if (data.success === false) {
         setError(data.message);
       }
-      navigate(`/listing/${data._id}`)
+      navigate(`/listing/${data._id}`);
     } catch (error) {
       setLoading(false);
       setError(error.message);
@@ -163,7 +165,10 @@ const params = useParams()
       <h1 className="text-3xl font-semibold text-center my-7">
         Update a Listing
       </h1>
-      <form onSubmit={submitHandler} className="flex flex-col sm:flex-row gap-6">
+      <form
+        onSubmit={submitHandler}
+        className="flex flex-col sm:flex-row gap-6"
+      >
         <div className="flex flex-col  gap-4 flex-1">
           <input
             className="p-2 rounded-lg"
@@ -288,28 +293,30 @@ const params = useParams()
                 onChange={changehandler}
                 value={formData.regularPrice}
               />
-              <p className="flex flex-col ">
-                Regular Price <span>{`(₹ / month)`}</span>
-              </p>
+              <p className="flex flex-col ">Regular Price</p>
+              {formData.type === "rent" && (
+                <span className="text-xs">{`(₹ / month)`}</span>
+              )}
             </div>
-            {formData.offer && 
-            <div className="flex items-center gap-2">
-            <input
-              type="number"
-              id="discountPrice"
-              size="12"
-              min="0"
-              max="10000000000"
-              required
-              className="border p-3 border-gray-300 rounded-lg"
-              onChange={changehandler}
-              value={formData.discountPrice}
-            />
-            <p className="flex flex-col ">
-              Discounted Price <span>{`(₹ / month)`}</span>
-            </p>
-          </div>
-            }
+            {formData.offer && (
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  id="discountPrice"
+                  size="12"
+                  min="0"
+                  max="10000000000"
+                  required
+                  className="border p-3 border-gray-300 rounded-lg"
+                  onChange={changehandler}
+                  value={formData.discountPrice}
+                />
+                <p className="flex flex-col ">Discounted Price</p>
+                {formData.type === "rent" && (
+                  <span className="text-xs">{`(₹ / month)`}</span>
+                )}
+              </div>
+            )}
           </div>
         </div>
         <div className="flex flex-col flex-1 gap-4">
@@ -354,10 +361,13 @@ const params = useParams()
                 </button>
               </div>
             ))}
-          <button disabled={loading || imageUpload} className="p-3 bg-gray-700 text-center rounded-lg uppercase text-white hover:opacity-95 disabled:opacity-80">
-           {loading ? 'Updating...': 'update listing'}
+          <button
+            disabled={loading || imageUpload}
+            className="p-3 bg-gray-700 text-center rounded-lg uppercase text-white hover:opacity-95 disabled:opacity-80"
+          >
+            {loading ? "Updating..." : "update listing"}
           </button>
-          {error && <p className="text-red-700 text-sm">{error}</p> }
+          {error && <p className="text-red-700 text-sm">{error}</p>}
         </div>
       </form>
     </main>
