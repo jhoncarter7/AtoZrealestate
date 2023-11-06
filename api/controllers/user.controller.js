@@ -73,3 +73,17 @@ export const getUserListings = async(req, res, next)=>{
     next(errorHandler(401, 'you can only delete your own listings'))
    }
   } 
+
+  export const getUser = async (req, res, next)=>{
+    try {
+      const userdata = await User.findById(req.params.id)
+      if(!userdata) return next(errorHandler(404, 'user Not found!'))
+      const {Password: pass, ...rest} = userdata._doc;
+       res.status(200).json(rest)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+
+  
