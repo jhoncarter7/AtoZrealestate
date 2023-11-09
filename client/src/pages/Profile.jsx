@@ -77,7 +77,6 @@ export default function Profile() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log(data);
       if (data.success === false) {
         dispatch(userUpdateFailure(data.message));
         return;
@@ -131,7 +130,6 @@ export default function Profile() {
         return;
       }
       setShowUserListings(data);
-      console.log(showUserListing);
     } catch (error) {
       setUserListingError(error.message);
     }
