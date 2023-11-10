@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ListingItem from "../components/ListingItem";
 export default function Search() {
   const [sidebardata, setSidebardata] = useState({
     searchTerm: "",
@@ -12,8 +13,8 @@ export default function Search() {
   });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [listing, setListing] = useState([]);
-  console.log(listing);
+  const [listings, setListings] = useState([]);
+  console.log(listings);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -43,16 +44,16 @@ export default function Search() {
         order: orderFromUrl || "desc",
       });
     }
-    const fetchListing = async () => {
+    const fetchListings = async () => {
       setLoading(true);
       const searchQuery = urlParams.toString();
       const res = await fetch(`/api/listing/get?${searchQuery}`);
       const data = await res.json();
       console.log('zsdgShgshrawe', data)
-      setListing(data);
+      setListings(data);
       setLoading(false);
     };
-    fetchListing();
+    fetchListings();
     
   }, [location.search]);
 
@@ -204,10 +205,28 @@ export default function Search() {
           </button>
         </form>
       </div>
-      <div className="">
+      <div className="flex-1">
+        <div className="">
         <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
           Listing results:
         </h1>
+      <div className="flex p-7 gap-4 flex-wrap">
+      {!loading && listings.length === 0 && (
+        <p className="text-xl text-slate-700">No Listing Found!</p>
+       )}
+       {loading && (
+        <p className="text-xl w-full text-slate-700 text-center">Loading...</p>
+       )}
+       {
+        !loading && listings && (
+          listings.map((listing)=>(
+            <ListingItem key={listing._id} listing={listing}/>
+          ))
+        )
+       }
+      </div>
+        </div>
+      
       </div>
     </div>
   );
