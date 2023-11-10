@@ -12,7 +12,6 @@ const [listingOffer, setListingOffer] = useState()
 const [listingSale, setListingSale] = useState()
 const [listingRent, setListingRent] = useState()
 const [loading, setLoading] = useState(false)
-console.log(listingOffer)
 SwiperCore.use([Navigation])
   useEffect(()=>{
    const fetchListingOffer = async ()=>{

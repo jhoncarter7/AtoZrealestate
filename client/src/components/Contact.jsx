@@ -5,7 +5,7 @@ export default function Contact({listing}) {
 
   const [landloard, setLandloard] = useState(null)
   const [message, setMessage] = useState()
-  console.log(listing.userRef)
+
 
   useEffect(()=>{
     const fetchuser = async () =>{

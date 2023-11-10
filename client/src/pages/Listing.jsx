@@ -45,7 +45,6 @@ export default function Listing() {
     };
     fetchlisting();
   }, [params.listingId]);
-  console.log(listing);
   return (
     <main>
       {loading && <p className="text-2xl text-center">Loading....</p>}
