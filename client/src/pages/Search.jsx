@@ -14,7 +14,8 @@ export default function Search() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
-  console.log(listings);
+  const [showMore, setShowMore] = useState(false);
+  console.log(showMore);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -37,24 +38,28 @@ export default function Search() {
       setSidebardata({
         searchTerm: searchTermFromUrl || "",
         type: typeFromUrl || "all",
-        parking: parkingFromUrl === 'true' ? true : false,
-        furnished: furnishedFormUrl === 'true' ? true : false,
-        offer: offerFromUrl === 'true' ? true : false,
+        parking: parkingFromUrl === "true" ? true : false,
+        furnished: furnishedFormUrl === "true" ? true : false,
+        offer: offerFromUrl === "true" ? true : false,
         sort: sortFromUrl || "created_at",
         order: orderFromUrl || "desc",
       });
     }
     const fetchListings = async () => {
       setLoading(true);
+      setShowMore(false)
       const searchQuery = urlParams.toString();
       const res = await fetch(`/api/listing/get?${searchQuery}`);
       const data = await res.json();
-      console.log('zsdgShgshrawe', data)
+      if (data.length > 8) {
+        setShowMore(true);
+      } else {
+        setShowMore(false);
+      }
       setListings(data);
       setLoading(false);
     };
     fetchListings();
-    
   }, [location.search]);
 
   const handleChange = (e) => {
@@ -77,7 +82,7 @@ export default function Search() {
       setSidebardata({
         ...sidebardata,
         [e.target.id]:
-          e.target.checked || e.target.checked === 'true' ? true : false,
+          e.target.checked || e.target.checked === "true" ? true : false,
       });
     }
     if (e.target.id === "sort_order") {
@@ -100,6 +105,19 @@ export default function Search() {
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   };
+  const onShowmore = async ()=>{
+    const numberOfListings = listings.length
+    const startIndex = numberOfListings
+    const urlParams = new URLSearchParams(location.search)
+    urlParams.set('startIndex', startIndex)
+    const searchParams = urlParams.toString()
+    const res = await fetch(`/api/listing/get?${searchParams}`)
+    const data = await res.json()
+    if(data.length < 9){
+      setShowMore(false)
+    }
+    setListings([...listings, ...data])
+  }
 
   return (
     <div className="flex flex-col md:flex-row">
@@ -206,27 +224,29 @@ export default function Search() {
         </form>
       </div>
       <div className="flex-1">
-        <div className="">
         <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
           Listing results:
         </h1>
-      <div className="flex p-7 gap-4 flex-wrap">
-      {!loading && listings.length === 0 && (
-        <p className="text-xl text-slate-700">No Listing Found!</p>
-       )}
-       {loading && (
-        <p className="text-xl w-full text-slate-700 text-center">Loading...</p>
-       )}
-       {
-        !loading && listings && (
-          listings.map((listing)=>(
-            <ListingItem key={listing._id} listing={listing}/>
-          ))
-        )
-       }
-      </div>
+        <div className="flex p-7 gap-4 flex-wrap">
+          {!loading && listings.length === 0 && (
+            <p className="text-xl text-slate-700">No Listing Found!</p>
+          )}
+          {loading && (
+            <p className="text-xl w-full text-slate-700 text-center">
+              Loading...
+            </p>
+          )}
+          {!loading &&
+            listings &&
+            listings.map((listing) => (
+              <ListingItem key={listing._id} listing={listing} />
+            ))}
+          {showMore && (
+            <button onClick={onShowmore} className="text-center text-green-600 hover:underline w-full">
+              show more
+            </button>
+          )}
         </div>
-      
       </div>
     </div>
   );
