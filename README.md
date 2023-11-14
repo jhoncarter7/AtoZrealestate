@@ -10,7 +10,6 @@ Welcome to the Real Estate Marketplace project, a powerful MERN stack applicatio
 - **CRUD Operations:** Perform real-world Create, Read, Update, and Delete operations on property listings using MongoDB.
 - **User-friendly Features:** Elevate user experience with image uploads, property listing management, and more.
 - **Advanced Search Functionality:** Incorporate cutting-edge search features to simplify user property discovery.
-- **Deployment Made Easy:** Learn how to deploy your MERN real estate app effortlessly using the 'render' platform.
 
 ## Prerequisites
 
