@@ -11,9 +11,6 @@ Welcome to the Real Estate Marketplace project, a powerful MERN stack applicatio
 - **User-friendly Features:** Elevate user experience with image uploads, property listing management, and more.
 - **Advanced Search Functionality:** Incorporate cutting-edge search features to simplify user property discovery.
 
-## Prerequisites
-
-A basic understanding of JavaScript and React is recommended. If you're eager to dive into full-stack development and excited about building a real estate marketplace, you're ready to get started.
 
 ## Getting Started
 
@@ -30,12 +27,7 @@ Explore the project's detailed structure and functionality by referring to the t
 
 ## Additional Information
 
-- **Contributing:** Interested in contributing? Please follow our [Contribution Guidelines](CONTRIBUTING.md).
 - **Issues:** Check out the [Issue Tracker](https://github.com/jhoncarter7/AtoZrealestate/issues) to report or find existing issues.
 - **License:** This project is licensed under the [MIT License](LICENSE).
-
-## Connect With Us
-
-Join our community and stay updated with the latest project developments. Feel free to star the repository and share your experiences!
 
 **#MERNStack #WebDevelopment #RealEstateApp #FullStackDevelopment #JavaScript #React #MongoDB #NodeJS #JWTAuthentication**
